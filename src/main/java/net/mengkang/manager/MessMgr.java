@@ -12,7 +12,12 @@ import java.util.List;
  */
 public class MessMgr {
 
-    // 消息分发器
+    //  消息分发器
+    //0 老师登录和注册  注意 老师需要权限
+    //1 老师创建房间 年级grade 学生名studentname 学科subjetct 知识点info  时间time
+    //2 老师获取所有的房间列表
+    //3 课件完成
+    //4 获取所有的数据接口
     public static  void distribution(Client client,WebSocketFrame frame){
 
         String request = ((TextWebSocketFrame) frame).text();
