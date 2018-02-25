@@ -25,9 +25,10 @@ public class MessMgr {
             List<String> allMessage=  RedisMgr.getAllValue(client.getRoomId()+"_"+client.getClientId());
             JSONObject alljson = new JSONObject();
             alljson.put("allMessage",allMessage);
+            client.getChannel().writeAndFlush(new TextWebSocketFrame(alljson.toString()));
             return;
         }
-        //20001 消息是 把握自己的消息发送给别人
+        //20001 消息是 把自己的消息发送给别人
         if(codeId == 20001){
 
             return;
