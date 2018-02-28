@@ -14,6 +14,8 @@ public class Client {
     private long clientId;
     private int roomId;
     private Channel channel;
+    private String username;
+    private String password;
 
     public long getClientId() {
         return clientId;
@@ -37,6 +39,22 @@ public class Client {
 
     public void setChannel(Channel channel){
         this.channel = channel;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void sendMessage(String message){

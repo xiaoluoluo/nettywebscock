@@ -1,5 +1,7 @@
 package net.mengkang.manager;
 
+
+import net.mengkang.entity.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -25,6 +27,26 @@ public class RedisMgr {
         jedisPoolConfig.setMaxIdle(50);
         pool = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379,1000*5);
     }
+
+
+    //把客户端保存到缓存中
+    public static void setClient(Client client){
+
+        //保存客户端的所有信息
+
+    }
+
+    //根据用户名 获取客户端
+    public static Client getClient(String userName){
+
+        Jedis jedis = pool.getResource();
+        String client = jedis.get(userName);
+
+        Client client1 = new Client();
+        //保存客户端的所有信息
+        return client1;
+    }
+
 
     public static void setValue(String key,String value){
         Jedis jedis = pool.getResource();

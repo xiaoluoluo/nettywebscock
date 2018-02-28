@@ -74,13 +74,18 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         // 请求字符串
         String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
         client = RequestService.clientRegisterChannel(ctx.channel(),requestString);
-        if (client.getRoomId() == 0) {
-            System.err.printf("房间号不可缺省");
+        if(client == null){
+            System.err.printf("登录协议有错误");
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
             return;
         }
+//        if (client.getRoomId() == 0) {
+//            System.err.printf("房间号不可缺省");
+//            sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
+//            return;
+//        }
 
-        ClientMgr.createRoom(client.getRoomId()).add(client);
+//        ClientMgr.createRoom(client.getRoomId()).add(client);
 
         // Handshake
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(getWebSocketLocation(req), null, true);
