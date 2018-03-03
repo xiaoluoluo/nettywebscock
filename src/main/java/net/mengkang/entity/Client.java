@@ -13,6 +13,8 @@ public class Client {
 
     private long clientId;
     private int roomId;
+    private int status;
+    private int userStatus;
     private Channel channel;
     private String username;
     private String password;
@@ -31,6 +33,22 @@ public class Client {
 
     public void setRoomId(int roomId) {
         this.roomId = roomId;
+    }
+
+    public void setStatus(int status){
+        this.status  = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(int userStatus) {
+        this.userStatus = userStatus;
     }
 
     public Channel getChannel(){

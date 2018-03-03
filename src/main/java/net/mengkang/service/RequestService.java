@@ -1,9 +1,14 @@
 package net.mengkang.service;
 
 import io.netty.channel.Channel;
+import net.mengkang.dto.ClientStatus;
+import net.mengkang.dto.UserStatus;
 import net.mengkang.entity.Client;
+import net.mengkang.entity.RoomInfo;
 import net.mengkang.manager.RedisMgr;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class RequestService {
@@ -17,52 +22,64 @@ public class RequestService {
      */
     public static Client clientRegisterChannel(Channel Channel, String request) {
         JSONObject json = new JSONObject(request);
-
-
-        //注册
+        //注册协议
         int codeId = (Integer) json.get("code");
         if(codeId == 10100){
-            // 注册协议
-            //判断用户名有没有
-
-
-            // 如果没有  把用户名 密码存起来 并且分配用户id 保存数据库 注册成功
-            String username= "";
-            String password = "";
-
+            String username= (String) json.get("user");
+            String password = (String) json.get("password");
+            Integer userStatus = (Integer) json.get("password");
             Client client0 = RedisMgr.getClient(username);
             if (client0 != null){
                 // 你已经有用户了 不需要注册
-                return client0;
+                return null;
             }
-
             Client client = new Client();
             client.setUsername(username);
             client.setPassword(password);
+            client.setStatus(ClientStatus.regist.getStatus());
+            client.setUserStatus(userStatus);
             client.setClientId(Client.CONCURRENT_INTEGER.getAndIncrement());
-
+            client.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
             //存数据库
-            RedisMgr.setClient(client);
-
+            RedisMgr.saveClient(client);
             return client;
-
-
         }
 
         if(codeId == 10101){
-            //这个是登录协议 获取用户名和密码  查看数据库有没有注册  如果没有 请注册 如果有 返回这个用户id
-            String username = "";
-            String passWord = "";
+            //这个是登录协议
+            String username= (String) json.get("user");
+            String password = (String) json.get("password");
             // 到数据库获取客户端 然后匹配 密码
             Client client = RedisMgr.getClient(username);
             if (client == null){
                 //你没有注册  请先注册再登录
-
-                return client;
+                return null;
             }
+            if(!client.getPassword().equals(password)){
+                //密码不对
+            }
+            client.setStatus(ClientStatus.login.getStatus());
+            //修改状态
+            RedisMgr.saveClient(client);
             return client;
-
         }
+
+        if(codeId == 10102){
+            // 获取所有的房间信息
+            String user= (String) json.get("user");
+            Client client = RedisMgr.getClient(user);
+            if (client == null){
+                //你没有注册  请先注册再登录
+                return null;
+            }
+            if(client.getStatus() != ClientStatus.login.getStatus()){
+                //你没有登录 请先登录
+            }
+            List<RoomInfo> allRoomInfo = RedisMgr.getAllRoomInfo(user);
+            // 把所有的房间信息发给前端
+        }
+
+        //没有对应的协议
         return null;
     }
 }

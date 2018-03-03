@@ -79,14 +79,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
             return;
         }
-//        if (client.getRoomId() == 0) {
-//            System.err.printf("房间号不可缺省");
-//            sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
-//            return;
-//        }
-
-//        ClientMgr.createRoom(client.getRoomId()).add(client);
-
         // Handshake
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(getWebSocketLocation(req), null, true);
         handshaker = wsFactory.newHandshaker(req);
@@ -118,7 +110,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         if (!(frame instanceof TextWebSocketFrame)) {
             throw new UnsupportedOperationException(String.format("%s frame types not supported", frame.getClass().getName()));
         }
-        MessMgr.distribution(client,frame);
+
+        String request = ((TextWebSocketFrame) frame).text();
+        MessMgr.distribution(ctx.channel(),request);
     }
 
     private static void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, FullHttpResponse res) {

@@ -29,13 +29,7 @@ public class ClientMgr {
         return room;
     }
 
-    public static void sendMessToRoomClient(Client client, WebSocketFrame frame) {
-        String request = ((TextWebSocketFrame) frame).text();
-        System.out.println(" 收到 " + client.getChannel() + request);
-
-        //保存消息
-        String clientMsg  = MessageService.createMessage(client.getClientId(), request);
-        RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
+    public static void sendMessToRoomClient(Client client,  String request) {
 
         if (allClient.containsKey(client.getRoomId())) {
             List<Client> roomClient= allClient.get(client.getRoomId());
@@ -48,6 +42,9 @@ public class ClientMgr {
                 c.getChannel().writeAndFlush(new TextWebSocketFrame(msg));
             }
         }
+        //发送完保存消息
+        String clientMsg  = MessageService.createMessage(client.getClientId(), request);
+        RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
 
     }
 
