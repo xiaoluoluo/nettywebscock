@@ -181,10 +181,13 @@ public class MessMgr {
         }
         if(client.getUserStatus()== UserStatus.teacher.getStatus()){
             //如果是老师 就让他进入
+            RedisMgr.enterRoom(user,roomId);
             return;
         }
-        // 如果是学生 那么就判断他是否有这个课程
-
+        if(client.getUserStatus()== UserStatus.student.getStatus()){
+            // 如果是学生 那么就判断他是否有这个课程
+            return;
+        }
     }
 
 

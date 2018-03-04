@@ -122,6 +122,20 @@ public class RedisMgr {
         jedis.close();
     }
 
+    /**进入房间**/
+    public static void enterRoom(String user,int roomId){
+        Jedis jedis = pool.getResource();
+        String key = user+ "roomInfo";
+        List<String> allRoomInfo = jedis.lrange(key,0,-1);
+        jedis.close();
+        for (String roomInfo : allRoomInfo) {
+            JSONObject json = new JSONObject(roomInfo);
+        }
+
+
+    }
+
+
     /** 保存房间的消息**/
     public static void saveRoomMessage(String user,int roomId,String message){
         Jedis jedis = pool.getResource();
