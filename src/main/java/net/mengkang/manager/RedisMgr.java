@@ -45,7 +45,6 @@ public class RedisMgr {
 
     /**根据用户名 获取客户端**/
     public static Client getClient(String userName){
-        Jedis jedis = pool.getResource();
         String clientData = getValue(userName);
         if(clientData == null || clientData.equals("")){
             //没有这个客户端
@@ -124,7 +123,7 @@ public class RedisMgr {
     }
 
     /** 保存房间的消息**/
-    public static void saveClassRoomMessage(String user,int roomId,String message){
+    public static void saveRoomMessage(String user,int roomId,String message){
         Jedis jedis = pool.getResource();
         String key = user+roomId+"message";
         jedis.lpush(key,message);

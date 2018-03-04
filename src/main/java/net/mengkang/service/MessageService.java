@@ -5,10 +5,10 @@ import org.json.JSONObject;
 
 public class MessageService {
 
-    public static String createMessage(long clientId, String message) {
+    public static String createMessage(int errorCode,String errorMess,long clientId, String message) {
         JSONObject msg = new JSONObject();
-        msg.put("errorCode",0);
-        msg.put("errorMess","");
+        msg.put("errorCode",errorCode);
+        msg.put("errorMess",errorMess);
         msg.put("clientId",clientId);
         msg.put("data",message);
         msg.put("time",System.currentTimeMillis());

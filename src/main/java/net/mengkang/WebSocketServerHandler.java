@@ -9,6 +9,7 @@ import io.netty.util.CharsetUtil;
 import net.mengkang.entity.Client;
 import net.mengkang.manager.ClientMgr;
 import net.mengkang.manager.MessMgr;
+import net.mengkang.service.MessageService;
 import net.mengkang.service.RequestService;
 
 import java.util.List;
@@ -71,14 +72,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
             return;
         }
-        // 请求字符串
-        String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
-        client = RequestService.clientRegisterChannel(ctx.channel(),requestString);
-        if(client == null){
-            System.err.printf("登录协议有错误");
-            sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
-            return;
-        }
         // Handshake
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(getWebSocketLocation(req), null, true);
         handshaker = wsFactory.newHandshaker(req);
@@ -86,14 +79,11 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
         } else {
             ChannelFuture channelFuture = handshaker.handshake(ctx.channel(), req);
-
             // 握手成功之后,业务逻辑
             if (channelFuture.isSuccess()) {
-                if (client.getClientId() == 0) {
-                    System.out.println(ctx.channel() + " 游客");
-                    return;
-                }
-
+                // 请求字符串
+                String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
+                client = RequestService.getClient(requestString);
             }
         }
     }
@@ -110,8 +100,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         if (!(frame instanceof TextWebSocketFrame)) {
             throw new UnsupportedOperationException(String.format("%s frame types not supported", frame.getClass().getName()));
         }
-
         String request = ((TextWebSocketFrame) frame).text();
+        //消息转发
         MessMgr.distribution(ctx.channel(),request);
     }
 
@@ -143,6 +133,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        //这里需要改
         if (client != null && ClientMgr.isHasRoom(client.getRoomId())) {
             List<Client> allRoomClient =  ClientMgr.createRoom(client.getRoomId());
             allRoomClient.remove(client);

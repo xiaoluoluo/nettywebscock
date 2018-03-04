@@ -38,12 +38,12 @@ public class ClientMgr {
                     //不发给自己
                     continue;
                 }
-                String msg  = MessageService.createMessage(c.getClientId(), request);
+                String msg  = MessageService.createMessage(0,"",c.getClientId(), request);
                 c.getChannel().writeAndFlush(new TextWebSocketFrame(msg));
             }
         }
         //发送完保存消息
-        String clientMsg  = MessageService.createMessage(client.getClientId(), request);
+        String clientMsg  = MessageService.createMessage(0,"",client.getClientId(), request);
         RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
 
     }
