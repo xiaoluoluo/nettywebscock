@@ -80,10 +80,9 @@ public class RedisMgr {
 
     /**获取这个用户的所有房间信息**/
     public static List<RoomInfo> getAllRoomInfo(String user){
-        Jedis jedis = pool.getResource();
         String key = user+ "roomInfo";
-        List<String> allRoomInfo = jedis.lrange(key,0,-1);
-        jedis.close();
+
+        List<String> allRoomInfo = getAllValue(key);
         List<RoomInfo> roomInfos = new ArrayList<>();
         if(allRoomInfo==null ||allRoomInfo.equals("")){
             return roomInfos;
@@ -106,7 +105,34 @@ public class RedisMgr {
         return roomInfos;
     }
 
-    /**创建房间**/
+    /**学生获取这个用户的所有房间信息**/
+    public static List<RoomInfo> studentGetAllRoomInfo(String studentName){
+        String key = studentName+ "roomInfo";
+        List<String> allRoomInfo = getAllValue(key);
+
+        List<RoomInfo> roomInfos = new ArrayList<>();
+        if(allRoomInfo==null ||allRoomInfo.equals("")){
+            return roomInfos;
+        }
+        for (String roomInfo : allRoomInfo){
+            JSONObject json = new JSONObject(roomInfo);
+            RoomInfo rinfo = new RoomInfo();
+            int roomId = (Integer)json.get("roomId");
+            String grade = (String)json.get("grade");
+            String studentName0 = (String)json.get("studentName");
+            String subject = (String)json.get("subject");
+            String info = (String)json.get("info");
+            rinfo.setRoomId(roomId);
+            rinfo.setGrade(grade);
+            rinfo.setStudentname(studentName0);
+            rinfo.setSubject(subject);
+            rinfo.setInfo(info);
+            roomInfos.add(rinfo);
+        }
+        return roomInfos;
+    }
+
+    /**老师创建房间**/
     public static void createClassRoom(String user,RoomInfo roomInfo){
         Jedis jedis = pool.getResource();
         String key = user+"roomInfo";
@@ -122,19 +148,51 @@ public class RedisMgr {
         jedis.close();
     }
 
-    /**进入房间**/
-    public static void enterRoom(String user,int roomId){
+    /**学生创建房间**/
+    public static void createStudentClassRoom(String studentName,RoomInfo roomInfo){
         Jedis jedis = pool.getResource();
-        String key = user+ "roomInfo";
-        List<String> allRoomInfo = jedis.lrange(key,0,-1);
+        String key = studentName+"roomInfo";
+        JSONObject clientObject = new JSONObject();
+        clientObject.put("roomId",roomInfo.getRoomId());
+        clientObject.put("grade",roomInfo.getGrade());
+        clientObject.put("studentName",roomInfo.getStudentname());
+        clientObject.put("subject",roomInfo.getSubject());
+        clientObject.put("info",roomInfo.getInfo());
+        String clientObjectString = clientObject.toString();
+        jedis.lpush(key,clientObjectString);
         jedis.close();
-        for (String roomInfo : allRoomInfo) {
-            JSONObject json = new JSONObject(roomInfo);
-        }
-
-
     }
 
+
+    /**进入房间**/
+    public static void enterRoom(String user,int roomId){
+        String key = user+ "roomInfo";
+        List<String> allRoomInfo = getAllValue(key);
+        for (String roomInfo : allRoomInfo) {
+            JSONObject json = new JSONObject(roomInfo);
+            int rId = (Integer)json.get("roomId");
+            if (roomId == rId){
+
+            }
+        }
+    }
+
+    /**增加学生**/
+    public static void addStudent(String teacherUser ,JSONObject clientObject){
+        String key = teacherUser+"studentInfo";
+
+        Jedis jedis = pool.getResource();
+        String clientObjectString = clientObject.toString();
+        jedis.lpush(key,clientObjectString);
+        jedis.close();
+    }
+
+    /**获取学生**/
+    public static  List<String> getStudent(String teacherUser){
+        String key = teacherUser+"studentInfo";
+        List<String> allStudentInfo = getAllValue(key);
+        return allStudentInfo;
+    }
 
     /** 保存房间的消息**/
     public static void saveRoomMessage(String user,int roomId,String message){

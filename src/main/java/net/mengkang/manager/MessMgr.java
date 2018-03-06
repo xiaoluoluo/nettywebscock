@@ -18,12 +18,6 @@ import java.util.List;
  */
 public class MessMgr {
 
-    //  消息分发器
-    //0 老师登录和注册  注意 老师需要权限
-    //1 老师创建房间 年级grade 学生名studentname 学科subjetct 知识点info  时间time
-    //2 老师获取所有的房间列表
-    //3 课件完成
-    //4 获取所有的数据接口
     public static void distribution(Channel channel, String request){
         JSONObject json = new JSONObject(request);
         int codeId = (Integer) json.get("code");
@@ -46,6 +40,14 @@ public class MessMgr {
             }
             case 10104:{
                 enterRoom(channel,json);
+                return;
+            }
+            case 10105:{
+                addStudent(channel,json);
+                return;
+            }
+            case 10106:{
+                getStudent(channel,json);
                 return;
             }
         }
@@ -72,6 +74,14 @@ public class MessMgr {
         client.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
         //存数据库
         RedisMgr.saveClient(client);
+
+        JSONObject data = new JSONObject();
+        data.put("code",10100);
+        //1表示成功
+        data.put("status",1);
+        String dataMessage =data.toString();
+        String message = MessageService.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
     }
     /**登录消息**/
     private static void loginMessage(Channel channel, JSONObject json){
@@ -95,6 +105,14 @@ public class MessMgr {
         client.setStatus(ClientStatus.login.getStatus());
         //更新客户端的状态
         RedisMgr.saveClient(client);
+        JSONObject data = new JSONObject();
+        data.put("code",10101);
+        //1表示成功
+        data.put("status",1);
+        data.put("userStatus",client.getUserStatus());
+        String dataMessage =data.toString();
+        String message = MessageService.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
     }
     /**获取所有的房间信息**/
     public static void getAllRoomInfo(Channel channel, JSONObject json){
@@ -125,10 +143,16 @@ public class MessMgr {
             infoJson.put("info",info.getInfo());
             allRoomInfoJson.put(infoJson);
         }
-        String message = MessageService.createMessage(0,"",0, allRoomInfoJson.toString());
+        JSONObject data = new JSONObject();
+        data.put("code",10102);
+        //1表示成功
+        data.put("status",1);
+        data.put("data",allRoomInfoJson.toString());
+        String message = MessageService.createMessage(0,"",0, data.toString());
         channel.writeAndFlush(new TextWebSocketFrame(message));
     }
-    /**创建房间消息**/
+
+    /**创建房间消息--只有老师可以创建房间**/
     public static void createRoom(Channel channel, JSONObject json){
         String user= (String) json.get("user");
         String grade= (String) json.get("grade");
@@ -161,7 +185,17 @@ public class MessMgr {
         rinfo.setStudentname(studentName);
         rinfo.setInfo(info);
         RedisMgr.createClassRoom(user,rinfo);
+        //老师创建房间信息的同时 也会给学生创建房间信息 他们的房间信息是一样的
+        RedisMgr.createStudentClassRoom(studentName,rinfo);
+        JSONObject data = new JSONObject();
+        data.put("code",10103);
+        //1表示成功
+        data.put("status",1);
+        String dataMessage =data.toString();
+        String message = MessageService.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
     }
+
     /***进入房间**/
     public static void enterRoom(Channel channel, JSONObject json){
         //进入房间
@@ -188,6 +222,63 @@ public class MessMgr {
             // 如果是学生 那么就判断他是否有这个课程
             return;
         }
+        JSONObject data = new JSONObject();
+        data.put("code",10104);
+        //1表示成功
+        data.put("status",1);
+        String dataMessage =data.toString();
+        String message = MessageService.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
+
+    }
+
+    /**增加学生**/
+    public static void addStudent(Channel channel, JSONObject json){
+
+        String teacherUser= (String) json.get("teacherUser");
+        String studentName= (String) json.get("stName");
+        Integer studentPhone= (Integer) json.get("stPhone");
+        Integer studentAddress= (Integer) json.get("stAddress");
+        Integer studentGrade= (Integer) json.get("stGrade");
+        Integer studentRemark= (Integer) json.get("stRemark");
+
+        Integer studentId = Client.CONCURRENT_INTEGER.decrementAndGet();
+
+
+        JSONObject studentObject = new JSONObject();
+        studentObject.put("studentName",studentName);
+        studentObject.put("studentPhone",studentPhone);
+        studentObject.put("studentAddress",studentAddress);
+        studentObject.put("studentGrade",studentGrade);
+        studentObject.put("studentRemark",studentRemark);
+        studentObject.put("studentId",studentId);
+
+        RedisMgr.addStudent(teacherUser,studentObject);
+        JSONObject data = new JSONObject();
+        data.put("code",10105);
+        //1表示成功
+        data.put("status",1);
+        String dataMessage =data.toString();
+        String message = MessageService.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
+    }
+
+    public static void getStudent(Channel channel, JSONObject json){
+        String teacherUser= (String) json.get("teacherUser");
+        List<String> allStudent = RedisMgr.getStudent(teacherUser);
+        JSONArray allStudentJson = new JSONArray();
+        for (String info : allStudent){
+            JSONObject infoJson = new JSONObject();
+            infoJson.put("info",info);
+            allStudentJson.put(infoJson);
+        }
+        JSONObject data = new JSONObject();
+        data.put("code",10106);
+        //1表示成功
+        data.put("status",1);
+        data.put("data",allStudentJson.toString());
+        String message = MessageService.createMessage(0,"",0, data.toString());
+        channel.writeAndFlush(new TextWebSocketFrame(message));
     }
 
 
