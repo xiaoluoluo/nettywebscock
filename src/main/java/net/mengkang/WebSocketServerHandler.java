@@ -9,8 +9,6 @@ import io.netty.util.CharsetUtil;
 import net.mengkang.entity.Client;
 import net.mengkang.manager.ClientMgr;
 import net.mengkang.manager.MessMgr;
-import net.mengkang.service.MessageService;
-import net.mengkang.service.RequestService;
 
 import java.util.List;
 import java.util.Map;
@@ -83,7 +81,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             if (channelFuture.isSuccess()) {
                 // 请求字符串
                 String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
-                client = RequestService.getClient(requestString);
+                client = ClientMgr.getClient(requestString);
             }
         }
     }

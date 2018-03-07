@@ -4,6 +4,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import net.mengkang.entity.Client;
 import net.mengkang.service.MessageService;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,19 @@ public class ClientMgr {
         String clientMsg  = MessageService.createMessage(0,"",client.getClientId(), request);
         RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
 
+    }
+
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    public static Client getClient(String request) {
+        JSONObject json = new JSONObject(request);
+        String username= (String) json.get("user");
+        Client client = RedisMgr.getClient(username);
+        return client;
     }
 
 }
