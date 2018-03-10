@@ -30,6 +30,19 @@ public class RedisMgr {
         pool = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379,1000*5);
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
+    public static Client getClientByRequest(String request) {
+        JSONObject json = new JSONObject(request);
+        String username= (String) json.get("user");
+        Client client = RedisMgr.getClient(username);
+        return client;
+    }
+
+
     /**把客户端保存到缓存中**/
     public static void saveClient(Client client){
         JSONObject clientObject = new JSONObject();
@@ -47,7 +60,7 @@ public class RedisMgr {
     public static Client getClient(String userName){
         String clientData = getValue(userName);
         if(clientData == null || clientData.equals("")){
-            //没有这个客户端
+            //没有这个客户端 -- 说明这个用户没有注册过
             return null;
         }
         JSONObject json = new JSONObject(clientData);

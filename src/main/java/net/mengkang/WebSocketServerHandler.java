@@ -9,6 +9,7 @@ import io.netty.util.CharsetUtil;
 import net.mengkang.entity.Client;
 import net.mengkang.manager.ClientMgr;
 import net.mengkang.manager.MessMgr;
+import net.mengkang.manager.RedisMgr;
 
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             if (channelFuture.isSuccess()) {
                 // 请求字符串
                 String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
-                client = ClientMgr.getClient(requestString);
+                client = RedisMgr.getClientByRequest(requestString);
             }
         }
     }
@@ -132,9 +133,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         //这里需要改
-        if (client != null && ClientMgr.isHasRoom(client.getRoomId())) {
-            List<Client> allRoomClient =  ClientMgr.createRoom(client.getRoomId());
-            allRoomClient.remove(client);
+        if (client != null) {
+//            List<Client> allRoomClient =  ClientMgr.createRoom(client.getRoomId());
+//            allRoomClient.remove(client);
+            ClientMgr.removeClient(client);
         }
     }
 

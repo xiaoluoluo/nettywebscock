@@ -71,6 +71,17 @@ public class StudentService extends BaseService{
 
 
 
+    //学生进入老师课堂
+    public static void studentEnterTeacherClass(Channel channel, JSONObject json){
+
+        String teacherUser= (String) json.get("teacherUser");
+
+
+        // 如果老师不在线 学生不可以进去
+
+        // 把这个老师的所有课件都发给这个学生
+    }
+
 
 
 }
