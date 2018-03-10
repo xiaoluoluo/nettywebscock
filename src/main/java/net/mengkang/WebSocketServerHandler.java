@@ -83,6 +83,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 // 请求字符串
                 String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
                 client = RedisMgr.getClientByRequest(requestString);
+                if(client != null){
+                    ClientMgr.addClient(client);
+                }
             }
         }
     }
@@ -134,8 +137,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         //这里需要改
         if (client != null) {
-//            List<Client> allRoomClient =  ClientMgr.createRoom(client.getRoomId());
-//            allRoomClient.remove(client);
             ClientMgr.removeClient(client);
         }
     }
