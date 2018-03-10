@@ -12,10 +12,15 @@ import java.util.List;
 
 public class StudentService extends BaseService{
 
+    //增加学生 会把学生放在一个学生池子里
+    // 同时在老师列表里面增加一个学生
+
+
     /**增加学生**/
     public static void addStudent(Channel channel, JSONObject json){
 
         String teacherUser= (String) json.get("teacherUser");
+
         String studentName= (String) json.get("stName");
         Integer studentPhone= (Integer) json.get("stPhone");
         Integer studentAddress= (Integer) json.get("stAddress");
@@ -33,7 +38,10 @@ public class StudentService extends BaseService{
         studentObject.put("studentRemark",studentRemark);
         studentObject.put("studentId",studentId);
 
-        RedisMgr.addStudent(teacherUser,studentObject);
+        //暂时没有做重复的过滤
+        RedisMgr.addStudentTOPool(studentObject);
+        RedisMgr.addStudentTOTeacher(teacherUser,studentObject);
+
         JSONObject data = new JSONObject();
         data.put("code",10105);
         //1表示成功
