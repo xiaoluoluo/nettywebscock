@@ -1,4 +1,11 @@
 package net.mengkang.service;
 
-public class TeacherService extends RedisService{
+public class TeacherService extends BaseService{
+
+
+
+
+
+
+
 }

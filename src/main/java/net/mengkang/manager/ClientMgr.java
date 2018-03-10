@@ -1,9 +1,7 @@
 package net.mengkang.manager;
 
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import net.mengkang.entity.Client;
-import net.mengkang.service.MessageService;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,12 +37,12 @@ public class ClientMgr {
                     //不发给自己
                     continue;
                 }
-                String msg  = MessageService.createMessage(0,"",c.getClientId(), request);
+                String msg  = MessMgr.createMessage(0,"",c.getClientId(), request);
                 c.getChannel().writeAndFlush(new TextWebSocketFrame(msg));
             }
         }
         //发送完保存消息
-        String clientMsg  = MessageService.createMessage(0,"",client.getClientId(), request);
+        String clientMsg  = MessMgr.createMessage(0,"",client.getClientId(), request);
         RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
 
     }
