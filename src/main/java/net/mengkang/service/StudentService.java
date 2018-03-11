@@ -22,10 +22,10 @@ public class StudentService extends BaseService{
         String teacherUser= (String) json.get("teacherUser");
 
         String studentName= (String) json.get("stName");
-        Integer studentPhone= (Integer) json.get("stPhone");
-        Integer studentAddress= (Integer) json.get("stAddress");
-        Integer studentGrade= (Integer) json.get("stGrade");
-        Integer studentRemark= (Integer) json.get("stRemark");
+        String studentPhone= (String) json.get("stPhone");
+        String studentAddress= (String) json.get("stAddress");
+        String studentGrade= (String) json.get("stGrade");
+        String studentRemark= (String) json.get("stRemark");
 
         Integer studentId = Client.CONCURRENT_INTEGER.decrementAndGet();
 
