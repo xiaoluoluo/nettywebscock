@@ -43,6 +43,11 @@ public class MessMgr {
                 StudentService.getStudent(channel,json);
                 return;
             }
+            case 10107:{
+                //学生获取房间信息
+                ClassRoomService.getStudentRoomInfo(channel,json);
+                return;
+            }
         }
 //        ClientMgr.sendMessToRoomClient(client,request);
     }
