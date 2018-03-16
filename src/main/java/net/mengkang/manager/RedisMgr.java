@@ -124,7 +124,7 @@ public class RedisMgr {
         List<String> allRoomInfo = getAllValue(key);
 
         List<RoomInfo> roomInfos = new ArrayList<>();
-        if(allRoomInfo==null ||allRoomInfo.equals("")){
+        if(allRoomInfo==null ||allRoomInfo.isEmpty()){
             return roomInfos;
         }
         for (String roomInfo : allRoomInfo){
@@ -208,7 +208,7 @@ public class RedisMgr {
         jedis.close();
     }
 
-    /**获取学生**/
+    /**老师获取自己的学生**/
     public static  List<String> getStudent(String teacherUser){
         String key = teacherUser+"studentInfo";
         List<String> allStudentInfo = getAllValue(key);

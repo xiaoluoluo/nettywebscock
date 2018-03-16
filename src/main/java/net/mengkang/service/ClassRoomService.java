@@ -57,21 +57,18 @@ public class ClassRoomService extends BaseService{
     // 这个消息需要改
     public static void getStudentRoomInfo(Channel channel, JSONObject json){
         // 获取所有的房间信息
-        String user= (String) json.get("user");
-        Client client = RedisMgr.getClient(user);
-        if (client == null){
-            //你没有注册  请先注册再登录
-            String message = MessMgr.createMessage(4,"你没有注册  请先注册再登录",0, "");
+        String studentName= (String) json.get("studentName");
+        List<RoomInfo> allRoomInfo = RedisMgr.studentGetAllRoomInfo(studentName);
+        if (allRoomInfo.isEmpty()){
+            JSONObject data = new JSONObject();
+            data.put("code",10107);
+            //1表示成功
+            data.put("status",0);
+            data.put("data","");
+            String message = MessMgr.createMessage(0,"",0, data.toString());
             channel.writeAndFlush(new TextWebSocketFrame(message));
-            return ;
+            return;
         }
-        if(client.getStatus() != ClientStatus.login.getStatus()){
-            //你没有登录 请先登录
-            String message = MessMgr.createMessage(5,"你没有登录 请先登录",0, "");
-            channel.writeAndFlush(new TextWebSocketFrame(message));
-            return ;
-        }
-        List<RoomInfo> allRoomInfo = RedisMgr.getAllRoomInfo(user);
         // 把所有的房间信息发给前端
         JSONArray allRoomInfoJson = new JSONArray();
         for (RoomInfo info : allRoomInfo){
@@ -84,7 +81,7 @@ public class ClassRoomService extends BaseService{
             allRoomInfoJson.put(infoJson);
         }
         JSONObject data = new JSONObject();
-        data.put("code",10102);
+        data.put("code",10107);
         //1表示成功
         data.put("status",1);
         data.put("data",allRoomInfoJson.toString());

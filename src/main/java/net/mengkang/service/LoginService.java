@@ -47,6 +47,23 @@ public class LoginService extends BaseService{
         //这个是登录协议
         String username= (String) json.get("user");
         String password = (String) json.get("password");
+        Integer userStatus = (Integer) json.get("userStatus");
+        if (userStatus ==1 ){
+            // 如果是学生
+            // 后期需要做密码验证
+
+            
+
+            JSONObject data = new JSONObject();
+            data.put("code",10101);
+            //1表示成功
+            data.put("status",1);
+            data.put("userStatus",1);
+            String dataMessage =data.toString();
+            String message = MessMgr.createMessage(0,"",0, dataMessage);
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
         // 到数据库获取客户端 然后匹配 密码
         Client client = RedisMgr.getClient(username);
         if (client == null){
