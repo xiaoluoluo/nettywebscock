@@ -1,5 +1,7 @@
 package net.mengkang.entity;
 
+import io.netty.channel.Channel;
+
 /**
  * Created by luoxiaosong on 2018/3/3.
  */
@@ -10,6 +12,10 @@ public class RoomInfo {
     private String studentName;
     private String subject;
     private String info;
+
+    private Channel teacherChannel;
+
+    private Channel studentChannel;
 
     public long getRoomId() {
         return roomId;
@@ -50,4 +56,21 @@ public class RoomInfo {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    public Channel getStudentChannel() {
+        return studentChannel;
+    }
+
+    public void setStudentChannel(Channel studentChannel) {
+        this.studentChannel = studentChannel;
+    }
+
+    public Channel getTeacherChannel() {
+        return teacherChannel;
+    }
+
+    public void setTeacherChannel(Channel teacherChannel) {
+        this.teacherChannel = teacherChannel;
+    }
+
 }
