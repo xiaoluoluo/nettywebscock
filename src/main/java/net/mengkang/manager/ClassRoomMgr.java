@@ -21,7 +21,7 @@ public class ClassRoomMgr {
     }
 
     //发消息给房间其他成员
-    public static void sendMessToRoomMember(RoomInfo roomInfo, boolean isTeacher, String message) {
+    public static void sendMessToRoomMember(boolean isTeacher, RoomInfo roomInfo, String message) {
 
         if (roomInfo.getStudentChannel() == null){
             // 房间里面没有学生

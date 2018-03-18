@@ -32,42 +32,4 @@ public class ClientMgr {
             allClient.remove(client);
         }
     }
-
-
-
-//    public static boolean isHasRoom(int roomId){
-//        return allClient.containsKey(roomId);
-//    }
-
-//    public static List<Client> createRoom(int roomId){
-//        if (isHasRoom(roomId)){
-//            return allClient.get(roomId);
-//        }
-//        List<Client> room = new ArrayList<>();
-//        allClient.put(roomId,room);
-//        return room;
-//    }
-
-//    public static void sendMessToRoomClient(Client client,  String request) {
-//
-//        if (allClient.containsKey(client.getRoomId())) {
-//            List<Client> roomClient= allClient.get(client.getRoomId());
-//            for(Client c:roomClient){
-//                if(c.getClientId() == client.getClientId()){
-//                    //不发给自己
-//                    continue;
-//                }
-//                String msg  = MessMgr.createMessage(0,"",c.getClientId(), request);
-//                c.getChannel().writeAndFlush(new TextWebSocketFrame(msg));
-//            }
-//        }
-//        //发送完保存消息
-//        String clientMsg  = MessMgr.createMessage(0,"",client.getClientId(), request);
-//        RedisMgr.setValue(client.getRoomId()+"_"+client.getClientId(),clientMsg);
-//
-//    }
-
-
-
-
 }
