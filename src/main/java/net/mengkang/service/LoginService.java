@@ -50,10 +50,22 @@ public class LoginService extends BaseService{
         Integer userStatus = (Integer) json.get("userStatus");
         if (userStatus ==1 ){
             // 如果是学生
-            // 后期需要做密码验证
-
-            
-
+            // 获取这个学生的对象
+            String studentName = username;
+            String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
+            if (studentInfo == null){
+                String message = MessMgr.createMessage(3,"没有这个学生账号",0, "");
+                channel.writeAndFlush(new TextWebSocketFrame(message));
+                return;
+            }
+            JSONObject studentJson = new JSONObject(studentInfo);
+            String spassword = (String) studentJson.get("password");
+            if (!password.equals(spassword)){
+                //密码不对
+                String message = MessMgr.createMessage(3,"密码不对",0, "");
+                channel.writeAndFlush(new TextWebSocketFrame(message));
+                return;
+            }
             JSONObject data = new JSONObject();
             data.put("code",10101);
             //1表示成功

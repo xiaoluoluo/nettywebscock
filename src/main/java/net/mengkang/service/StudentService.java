@@ -39,7 +39,13 @@ public class StudentService extends BaseService{
         studentObject.put("studentId",studentId);
 
         //暂时没有做重复的过滤
-        RedisMgr.addStudentTOPool(studentObject);
+        String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
+        if (studentInfo != null){
+            String message = MessMgr.createMessage(3,"这个学生名字已经有了 请在学生后面名字加数字",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
+        RedisMgr.addStudentTOPool(studentName,studentObject);
         RedisMgr.addStudentTOTeacher(teacherUser,studentObject);
 
         JSONObject data = new JSONObject();

@@ -32,6 +32,7 @@ public class MessMgr {
                 return;
             }
             case 10104:{
+                // 进入房间
                 ClassRoomService.enterRoom(channel,json);
                 return;
             }

@@ -191,12 +191,10 @@ public class RedisMgr {
     }
 
     /**增加学生到学生库**/
-    public static void addStudentTOPool(JSONObject clientObject){
-        String key = clientObject.get("studentName")+"studentInfo";
-        Jedis jedis = pool.getResource();
+    public static void addStudentTOPool(String studentName,JSONObject clientObject){
+        String key = studentName+"studentInfo";
         String clientObjectString = clientObject.toString();
-        jedis.lpush(key,clientObjectString);
-        jedis.close();
+        setValue(key,clientObjectString);
     }
 
     /**增加学生到老师下面**/
