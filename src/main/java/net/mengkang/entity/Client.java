@@ -3,16 +3,17 @@ package net.mengkang.entity;
 import io.netty.channel.Channel;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by zhoumengkang on 16/7/2.
  */
 public class Client {
 
-    public static AtomicInteger CONCURRENT_INTEGER = new AtomicInteger(0);
+    public static AtomicLong CONCURRENT_INTEGER = new AtomicLong(0);
 
     private long clientId;
-    private int roomId;
+    private long roomId;
     private int status;
     private int userStatus;
     private Channel channel;
@@ -27,11 +28,11 @@ public class Client {
         this.clientId = id;
     }
 
-    public int getRoomId() {
+    public long getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
 

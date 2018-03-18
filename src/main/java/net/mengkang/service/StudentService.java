@@ -27,7 +27,7 @@ public class StudentService extends BaseService{
         String studentGrade= (String) json.get("stGrade");
         String studentRemark= (String) json.get("stRemark");
 
-        Integer studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
+        long studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
 
 
         JSONObject studentObject = new JSONObject();

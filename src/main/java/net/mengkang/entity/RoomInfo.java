@@ -5,17 +5,17 @@ package net.mengkang.entity;
  */
 public class RoomInfo {
 
-    private int roomId;
+    private long roomId;
     private String grade;
     private String studentName;
     private String subject;
     private String info;
 
-    public int getRoomId() {
+    public long getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
 
