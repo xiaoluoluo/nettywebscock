@@ -33,7 +33,7 @@ public class MessMgr {
             }
             case 10104:{
                 // 进入房间
-                ClassRoomService.enterRoom(channel,json);
+                ClassRoomService.enterTeacherRoom(channel,json);
                 return;
             }
             case 10105:{
@@ -48,6 +48,9 @@ public class MessMgr {
                 //学生获取房间信息
                 ClassRoomService.getStudentRoomInfo(channel,json);
                 return;
+            }
+            case 10108:{
+                ClassRoomService.enterStudentRoom(channel,json);
             }
         }
 //        ClientMgr.sendMessToRoomClient(client,request);

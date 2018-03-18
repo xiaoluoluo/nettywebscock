@@ -133,9 +133,8 @@ public class ClassRoomService extends BaseService{
         channel.writeAndFlush(new TextWebSocketFrame(message));
     }
 
-    /***进入房间**/
-    public static void enterRoom(Channel channel, JSONObject json){
-        //进入房间
+    /***老师进入房间**/
+    public static void enterTeacherRoom(Channel channel, JSONObject json){
         String user= (String) json.get("user");
         Integer roomId= (Integer) json.get("roomId");
         Client client = RedisMgr.getClient(user);
@@ -150,15 +149,20 @@ public class ClassRoomService extends BaseService{
             channel.writeAndFlush(new TextWebSocketFrame(message));
             return ;
         }
+        boolean isHas = false;
         if(client.getUserStatus()== UserStatus.teacher.getStatus()){
             //如果是老师 就让他进入
-            RedisMgr.enterRoom(user,roomId);
-            return;
+           isHas = RedisMgr.hasClassRoom(user,roomId);
         }
-        if(client.getUserStatus()== UserStatus.student.getStatus()){
-            // 如果是学生 那么就判断他是否有这个课程
-            return;
+        if (!isHas){
+            String message = MessMgr.createMessage(5,"没有这个房间号",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return ;
         }
+
+        //  创建一个老师跟学生的房间
+        // 创建之后老师进入房间 等待学生的进入
+
         JSONObject data = new JSONObject();
         data.put("code",10104);
         //1表示成功
@@ -166,6 +170,21 @@ public class ClassRoomService extends BaseService{
         String dataMessage =data.toString();
         String message = MessMgr.createMessage(0,"",0, dataMessage);
         channel.writeAndFlush(new TextWebSocketFrame(message));
+
+    }
+
+    //学生进入房间
+    public static void enterStudentRoom(Channel channel, JSONObject json) {
+        String studentName= (String) json.get("user");
+        Integer roomId= (Integer) json.get("roomId");
+        String StudentStr =  RedisMgr.getValue(studentName+"");
+        if (StudentStr == null){
+            // 没有这个学生
+        }
+        // 查看老师 有没有在这个房间中
+
+        //如果老师在这个房间  那么 学生进入这个房间   然后两个就可以通信了
+
 
     }
 

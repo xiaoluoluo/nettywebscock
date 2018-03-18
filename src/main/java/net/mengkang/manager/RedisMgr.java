@@ -178,16 +178,17 @@ public class RedisMgr {
 
 
     /**进入房间**/
-    public static void enterRoom(String user,int roomId){
+    public static boolean hasClassRoom(String user,int roomId){
         String key = user+ "roomInfo";
         List<String> allRoomInfo = getAllValue(key);
         for (String roomInfo : allRoomInfo) {
             JSONObject json = new JSONObject(roomInfo);
             long rId = (Long)json.get("roomId");
             if (roomId == rId){
-
+                return true;
             }
         }
+        return false;
     }
 
     /**增加学生到学生库**/
