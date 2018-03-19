@@ -51,6 +51,11 @@ public class MessMgr {
             }
             case 10108:{
                 ClassRoomService.enterStudentRoom(channel,json);
+                return;
+            }
+            case 10109:{
+                ClassRoomService.addRoomMessage(channel,json);
+                return;
             }
         }
 //        ClientMgr.sendMessToRoomClient(client,request);

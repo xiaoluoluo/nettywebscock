@@ -176,6 +176,22 @@ public class RedisMgr {
         jedis.close();
     }
 
+    //获取房间信息 user 如果是老师用用户名 如果是学生就是学生名字
+    public static JSONObject getClassRoom(String user,long roomId){
+        String key = user+ "roomInfo";
+        List<String> allRoomInfo = getAllValue(key);
+        JSONObject classRoomjson = null;
+        for (String roomInfo : allRoomInfo) {
+            JSONObject json = new JSONObject(roomInfo);
+            long rId = (Long)json.get("roomId");
+            if (roomId == rId){
+                classRoomjson = json;
+            }
+        }
+        return classRoomjson;
+    }
+
+
 
     /**进入房间**/
     public static boolean hasClassRoom(String user,int roomId){
