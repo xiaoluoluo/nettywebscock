@@ -188,7 +188,7 @@ public class ClassRoomService extends BaseService{
 
     }
 
-    //学生进入房间
+    //学生进入房间  如果这个房间有数据 就要返回数据
     public static void enterStudentRoom(Channel channel, JSONObject json) {
         String studentName= (String) json.get("user");
         Long roomId= (Long) json.get("roomId");
@@ -245,12 +245,14 @@ public class ClassRoomService extends BaseService{
             return;
         }
         boolean isTeacher = true;
-        if (userStatus == 1 ){
+        if (userStatus == UserStatus.student.getStatus() ){
             isTeacher = false;
         }
         ClassRoomMgr.sendMessToRoomMember(isTeacher,roomInfo,clientMessage);
 
         // 这里需要保存消息
+
+
     }
 
 }
