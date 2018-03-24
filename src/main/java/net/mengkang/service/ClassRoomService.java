@@ -249,10 +249,8 @@ public class ClassRoomService extends BaseService{
             isTeacher = false;
         }
         ClassRoomMgr.sendMessToRoomMember(isTeacher,roomInfo,clientMessage);
-
         // 这里需要保存消息
-
-
+        RedisMgr.saveClassRoomMessage(roomId,clientMessage);
     }
 
 }

@@ -247,6 +247,14 @@ public class RedisMgr {
         return  resultList;
     }
 
+    /** 保存房间消息**/
+    public static void saveClassRoomMessage(long roomId,String  message){
+        String key = roomId+"classRoomMessage";
+        Jedis jedis = pool.getResource();
+        jedis.lpush(key,message);
+        jedis.close();
+    }
+
     // 结束的时候需要调用
     public static void end(){
         if(null != pool){
