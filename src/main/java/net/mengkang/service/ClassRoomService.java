@@ -192,7 +192,7 @@ public class ClassRoomService extends BaseService{
     public static void enterStudentRoom(Channel channel, JSONObject json) {
         String studentName= (String) json.get("user");
         Long roomId= (Long) json.get("roomId");
-        String StudentStr =  RedisMgr.getValue(studentName+"");
+        String StudentStr =  RedisMgr.getValue(studentName+"studentInfo");
         if (StudentStr == null){
             // 没有这个学生
             String message = MessMgr.createMessage(5,"没有这个学生",0, "");
