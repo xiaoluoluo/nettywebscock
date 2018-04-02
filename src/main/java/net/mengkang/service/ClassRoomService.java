@@ -137,7 +137,7 @@ public class ClassRoomService extends BaseService{
     /***老师进入房间**/
     public static void enterTeacherRoom(Channel channel, JSONObject json){
         String user= (String) json.get("user");
-        Long roomId= (Long) json.get("roomId");
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
         Client client = RedisMgr.getClient(user);
         if (client == null){
             String message = MessMgr.createMessage(5,"你没有登录 请先登录",0, "");
@@ -167,7 +167,7 @@ public class ClassRoomService extends BaseService{
         String subject = (String )classRoom.get("subject");
         String info = (String)classRoom.get("info");
 
-        long rroomId = (Long) classRoom.get("roomId");
+        long rroomId = Long.valueOf(String.valueOf(json.get("roomId")));
         roomInfo.setRoomId(rroomId);
         roomInfo.setGrade(rgrade);
         roomInfo.setStudentname(studentName);
@@ -191,7 +191,9 @@ public class ClassRoomService extends BaseService{
     //学生进入房间  如果这个房间有数据 就要返回数据
     public static void enterStudentRoom(Channel channel, JSONObject json) {
         String studentName= (String) json.get("user");
-        Long roomId= (Long) json.get("roomId");
+
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
+
         String StudentStr =  RedisMgr.getValue(studentName+"studentInfo");
         if (StudentStr == null){
             // 没有这个学生
@@ -228,7 +230,8 @@ public class ClassRoomService extends BaseService{
     // 增加房间消息
     public static void addRoomMessage(Channel channel, JSONObject json) {
 
-        Long roomId= (Long) json.get("roomId");
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
+
         Integer userStatus = (Integer) json.get("userStatus");
         String clientMessage = (String) json.get("message");
 

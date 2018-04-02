@@ -130,7 +130,7 @@ public class RedisMgr {
         for (String roomInfo : allRoomInfo){
             JSONObject json = new JSONObject(roomInfo);
             RoomInfo rinfo = new RoomInfo();
-            long roomId = (Long)json.get("roomId");
+            long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
             String grade = (String)json.get("grade");
             String studentName0 = (String)json.get("studentName");
             String subject = (String)json.get("subject");
@@ -183,7 +183,7 @@ public class RedisMgr {
         JSONObject classRoomjson = null;
         for (String roomInfo : allRoomInfo) {
             JSONObject json = new JSONObject(roomInfo);
-            long rId = (Long)json.get("roomId");
+            long rId = Long.valueOf(String.valueOf(json.get("roomId")));
             if (roomId == rId){
                 classRoomjson = json;
             }
