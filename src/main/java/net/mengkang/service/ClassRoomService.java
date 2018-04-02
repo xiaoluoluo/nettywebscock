@@ -248,9 +248,19 @@ public class ClassRoomService extends BaseService{
         if (userStatus == UserStatus.student.getStatus() ){
             isTeacher = false;
         }
-        ClassRoomMgr.sendMessToRoomMember(isTeacher,roomInfo,clientMessage);
+
+        JSONObject data = new JSONObject();
+        data.put("code",10109);
+        //1表示成功
+        data.put("status",1);
+        data.put("roomId",roomId);
+        data.put("clientMessage",clientMessage);
+        String dataMessage =data.toString();
+        String message = MessMgr.createMessage(0,"",0, dataMessage);
+
+        ClassRoomMgr.sendMessToRoomMember(isTeacher,roomInfo,message);
         // 这里需要保存消息
-        RedisMgr.saveClassRoomMessage(roomId,clientMessage);
+        RedisMgr.saveClassRoomMessage(roomId,message);
     }
 
 }
