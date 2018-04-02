@@ -255,6 +255,13 @@ public class RedisMgr {
         jedis.close();
     }
 
+    /** 获取房间消息**/
+    public static List<String> getClassRoomMessage(long roomId){
+        String key = roomId+"classRoomMessage";
+        List<String> allClassRoomMessage = getAllValue(key);
+        return allClassRoomMessage;
+    }
+
     // 结束的时候需要调用
     public static void end(){
         if(null != pool){

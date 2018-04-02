@@ -177,11 +177,14 @@ public class ClassRoomService extends BaseService{
         //加入房间
         ClassRoomMgr.addClassRoom(roomId,roomInfo);
 
+        List<String> allClassRoomMessage = RedisMgr.getClassRoomMessage(roomId);
         JSONObject data = new JSONObject();
         data.put("code",10104);
         //1表示成功
         data.put("status",1);
         data.put("roomId",roomId);
+        // 所有的房间消息
+        data.put("allClassRoomMessage",allClassRoomMessage.toString());
         String dataMessage =data.toString();
         String message = MessMgr.createMessage(0,"",0, dataMessage);
         channel.writeAndFlush(new TextWebSocketFrame(message));
