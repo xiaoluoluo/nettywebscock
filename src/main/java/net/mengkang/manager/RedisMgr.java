@@ -251,7 +251,7 @@ public class RedisMgr {
     public static void saveClassRoomMessage(long roomId,String  message){
         String key = roomId+"classRoomMessage";
         Jedis jedis = pool.getResource();
-        jedis.lpush(key,message);
+        jedis.rpush(key,message);
         jedis.close();
     }
 
