@@ -237,7 +237,7 @@ public class ClassRoomService extends BaseService{
     }
 
 
-    // 增加房间消息
+    // 增加房间消息（增加第二面板消息）
     public static void addRoomMessage(Channel channel, JSONObject json) {
 
         long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
@@ -274,6 +274,57 @@ public class ClassRoomService extends BaseService{
         ClassRoomMgr.sendMessToRoomMember(isTeacher,roomInfo,message);
         // 这里需要保存消息
         RedisMgr.saveClassRoomMessage(roomId,message);
+    }
+
+
+    // 增加第一面板消息
+    public static void addFirsPageMessage(Channel channel, JSONObject json) {
+
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
+
+        String clientMessage = (String) json.get("message");
+
+        RoomInfo roomInfo = ClassRoomMgr.getRoomInfo(roomId);
+
+        if (roomInfo == null){
+            String message = MessMgr.createMessage(5,"房间号有错误",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
+        RedisMgr.saveFirstClassRoomMessage(roomId,clientMessage);
+    }
+
+    // 同步第一面板消息到第二面板
+    public static void addFirsPageTOSecondPageMessage(Channel channel, JSONObject json) {
+
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
+
+        List<String> clientMessage = RedisMgr.getFirstClassRoomMessage(roomId);
+
+        RoomInfo roomInfo = ClassRoomMgr.getRoomInfo(roomId);
+
+        if (roomInfo == null){
+            String message = MessMgr.createMessage(5,"房间号有错误",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
+
+        // 需要把第面板消息 放到 第二面板去
+        JSONObject data = new JSONObject();
+        data.put("code",10109);
+        //1表示成功
+        data.put("status",1);
+        data.put("roomId",roomId);
+        data.put("clientMessage",clientMessage);
+        String dataMessage =data.toString();
+        String message = MessMgr.createMessage(0,"",0, dataMessage);
+
+        ClassRoomMgr.sendMessToRoomMember(true,roomInfo,message);
+
+        ClassRoomMgr.sendMessToRoomMember(false,roomInfo,message);
+        // 这里需要保存消息
+        RedisMgr.saveClassRoomMessage(roomId,message);
+
     }
 
 }

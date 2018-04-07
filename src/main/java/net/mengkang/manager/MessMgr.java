@@ -54,9 +54,19 @@ public class MessMgr {
                 return;
             }
             case 10109:{
+                // 增加第一面板消息  也就是 学生跟老师共同面板
                 ClassRoomService.addRoomMessage(channel,json);
                 return;
             }
+            case 10110:{
+                // 增加第一面板消息  这面板的消息 暂时不发给学生端的
+                ClassRoomService.addFirsPageMessage(channel,json);
+            }
+            case 10111:{
+                //同步  把老师第一面板的消息 同步到第二面板
+                ClassRoomService.addFirsPageTOSecondPageMessage(channel,json);
+            }
+
         }
 //        ClientMgr.sendMessToRoomClient(client,request);
     }

@@ -262,6 +262,21 @@ public class RedisMgr {
         return allClassRoomMessage;
     }
 
+    /** 保存房间第一面板消息**/
+    public static void saveFirstClassRoomMessage(long roomId,String  message){
+        String key = roomId+"firstClassRoomMessage";
+        Jedis jedis = pool.getResource();
+        jedis.rpush(key,message);
+        jedis.close();
+    }
+
+    /** 获取房间第一面板消息**/
+    public static List<String> getFirstClassRoomMessage(long roomId){
+        String key = roomId+"firstClassRoomMessage";
+        List<String> allClassRoomMessage = getAllValue(key);
+        return allClassRoomMessage;
+    }
+
     // 结束的时候需要调用
     public static void end(){
         if(null != pool){
