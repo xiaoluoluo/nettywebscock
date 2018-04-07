@@ -308,6 +308,11 @@ public class ClassRoomService extends BaseService{
             channel.writeAndFlush(new TextWebSocketFrame(message));
             return;
         }
+        if (clientMessage.isEmpty()){
+            String message = MessMgr.createMessage(5,"没有消息需要同步",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
 
         // 需要把第面板消息 放到 第二面板去
         JSONObject data = new JSONObject();
