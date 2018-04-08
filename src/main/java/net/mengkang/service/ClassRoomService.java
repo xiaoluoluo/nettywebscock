@@ -117,7 +117,8 @@ public class ClassRoomService extends BaseService{
             return ;
         }
         RoomInfo rinfo = new RoomInfo();
-        rinfo.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
+//        rinfo.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
+        rinfo.setRoomId(getId());
         rinfo.setGrade(grade);
         rinfo.setSubject(subject);
         rinfo.setStudentname(studentName);

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Client {
 
-    public static AtomicLong CONCURRENT_INTEGER = new AtomicLong(0);
+//    public static AtomicLong CONCURRENT_INTEGER = new AtomicLong(0);
 
     private long clientId;
     private long roomId;

@@ -30,6 +30,16 @@ public class RedisMgr {
         pool = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379,1000*5);
     }
 
+    public static Long getId(){
+        String key = "id";
+        return Long.valueOf(getValue(key));
+    }
+
+    public static void setId(long id){
+        String key = "id";
+        setValue("id",String.valueOf(id));
+    }
+
     /**
      *
      * @param request

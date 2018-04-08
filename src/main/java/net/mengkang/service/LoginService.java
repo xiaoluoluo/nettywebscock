@@ -29,8 +29,12 @@ public class LoginService extends BaseService{
         client.setPassword(password);
         client.setStatus(ClientStatus.regist.getStatus());
         client.setUserStatus(userStatus);
-        client.setClientId(Client.CONCURRENT_INTEGER.getAndIncrement());
-        client.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
+//        client.setClientId(Client.CONCURRENT_INTEGER.getAndIncrement());
+//        client.setRoomId(Client.CONCURRENT_INTEGER.getAndIncrement());
+
+        client.setClientId(getId());
+        client.setRoomId(getId());
+
         //存数据库
         RedisMgr.saveClient(client);
 

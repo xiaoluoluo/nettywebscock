@@ -27,7 +27,9 @@ public class StudentService extends BaseService{
         String studentGrade= (String) json.get("stGrade");
         String studentRemark= (String) json.get("stRemark");
 
-        long studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
+//        long studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
+
+        long studentId = getId();
 
 
         JSONObject studentObject = new JSONObject();
@@ -37,6 +39,7 @@ public class StudentService extends BaseService{
         studentObject.put("studentGrade",studentGrade);
         studentObject.put("studentRemark",studentRemark);
         studentObject.put("studentId",studentId);
+        studentObject.put("password",String.valueOf(studentId));
 
         //暂时没有做重复的过滤
         String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
