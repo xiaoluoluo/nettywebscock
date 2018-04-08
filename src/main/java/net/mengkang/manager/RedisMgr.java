@@ -32,6 +32,9 @@ public class RedisMgr {
 
     public static Long getId(){
         String key = "id";
+        if (getValue(key)==null){
+            return null;
+        }
         return Long.valueOf(getValue(key));
     }
 

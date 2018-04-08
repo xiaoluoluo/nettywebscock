@@ -317,7 +317,7 @@ public class ClassRoomService extends BaseService{
 
         // 需要把第面板消息 放到 第二面板去
         JSONObject data = new JSONObject();
-        data.put("code",10109);
+        data.put("code",10111);
         //1表示成功
         data.put("status",1);
         data.put("roomId",roomId);
