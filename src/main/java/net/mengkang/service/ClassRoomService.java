@@ -333,4 +333,67 @@ public class ClassRoomService extends BaseService{
 
     }
 
+    /***老师进入房间**/
+    public static void enterTeacherFirstRoom(Channel channel, JSONObject json){
+        String user= (String) json.get("user");
+        long roomId = Long.valueOf(String.valueOf(json.get("roomId")));
+        Client client = RedisMgr.getClient(user);
+        if (client == null){
+            String message = MessMgr.createMessage(5,"你没有登录 请先登录",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return ;
+        }
+        if(client.getStatus() != ClientStatus.login.getStatus()){
+            //你没有登录 请先登录
+            String message = MessMgr.createMessage(5,"你没有登录 请先登录",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return ;
+        }
+        JSONObject  classRoom = null;
+        if(client.getUserStatus()== UserStatus.teacher.getStatus()){
+            //如果是老师 就让他进入
+            classRoom = RedisMgr.getClassRoom(user,roomId);
+        }
+        if (classRoom == null){
+            String message = MessMgr.createMessage(5,"没有这个房间号",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return ;
+        }
+
+        RoomInfo roomInfo = new RoomInfo();
+        String rgrade = (String) classRoom.get("grade");
+        String studentName = (String) classRoom.get("studentName");
+        String subject = (String )classRoom.get("subject");
+        String info = (String)classRoom.get("info");
+
+        long rroomId = Long.valueOf(String.valueOf(json.get("roomId")));
+        roomInfo.setRoomId(rroomId);
+        roomInfo.setGrade(rgrade);
+        roomInfo.setStudentname(studentName);
+        roomInfo.setSubject(subject);
+        roomInfo.setInfo(info);
+        roomInfo.setTeacherChannel(channel);
+        //  进入第一界面 不需要加入房间
+//        ClassRoomMgr.addClassRoom(roomId,roomInfo);
+
+        List<String> allClassRoomMessage = RedisMgr.getClassRoomMessage(roomId);
+        JSONArray allMessageJson = new JSONArray();
+        for (String message:allClassRoomMessage){
+            JSONObject infoJson = new JSONObject();
+            infoJson.put("message",message);
+            allMessageJson.put(infoJson);
+        }
+
+        JSONObject data = new JSONObject();
+        data.put("code",10112);
+        //1表示成功
+        data.put("status",1);
+        data.put("roomId",roomId);
+        // 所有的房间消息
+        data.put("allClassRoomMessage",allMessageJson.toString());
+        String dataMessage =data.toString();
+        String message = MessMgr.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
+    }
+
 }

@@ -61,10 +61,16 @@ public class MessMgr {
             case 10110:{
                 // 增加第一面板消息  这面板的消息 暂时不发给学生端的
                 ClassRoomService.addFirsPageMessage(channel,json);
+                return;
             }
             case 10111:{
                 //同步  把老师第一面板的消息 同步到第二面板
                 ClassRoomService.addFirsPageTOSecondPageMessage(channel,json);
+                return;
+            }
+            case 10112:{
+                // 老师 进入第一面板
+                ClassRoomService.enterTeacherFirstRoom(channel,json);
             }
 
         }
