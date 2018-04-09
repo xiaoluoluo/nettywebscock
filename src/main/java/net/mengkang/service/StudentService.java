@@ -39,7 +39,7 @@ public class StudentService extends BaseService{
         studentObject.put("studentGrade",studentGrade);
         studentObject.put("studentRemark",studentRemark);
         studentObject.put("studentId",studentId);
-        studentObject.put("password",String.valueOf(studentId));
+        studentObject.put("password",studentId+studentName);
 
         //暂时没有做重复的过滤
         String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
