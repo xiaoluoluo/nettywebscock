@@ -12,6 +12,8 @@ public class RoomInfo {
     private String studentName;
     private String subject;
     private String info;
+    private String starClassTime;
+
 
     private Channel teacherChannel;
 
@@ -56,6 +58,14 @@ public class RoomInfo {
     public void setInfo(String info) {
         this.info = info;
     }
+    public void setStarClassTime(String starClassTime) {
+        this.starClassTime = starClassTime;
+    }
+
+    public String getStarClassTime() {
+        return starClassTime;
+    }
+
 
     public Channel getStudentChannel() {
         return studentChannel;

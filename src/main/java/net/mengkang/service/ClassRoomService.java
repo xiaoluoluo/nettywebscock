@@ -43,6 +43,8 @@ public class ClassRoomService extends BaseService{
             infoJson.put("subject",info.getSubject());
             infoJson.put("studentName",info.getStudentname());
             infoJson.put("info",info.getInfo());
+            infoJson.put("starClassTime",info.getStarClassTime());
+
             allRoomInfoJson.put(infoJson);
         }
         JSONObject data = new JSONObject();
@@ -97,6 +99,8 @@ public class ClassRoomService extends BaseService{
         String subject= (String) json.get("subject");
         String studentName= (String) json.get("studentName");
         String info= (String) json.get("info");
+        String starClassTime= (String) json.get("starClassTime");
+
         Client client = RedisMgr.getClient(user);
         if (client == null){
             //你没有注册  请先注册再登录
@@ -123,6 +127,8 @@ public class ClassRoomService extends BaseService{
         rinfo.setSubject(subject);
         rinfo.setStudentname(studentName);
         rinfo.setInfo(info);
+        rinfo.setStarClassTime(starClassTime);
+
         RedisMgr.createClassRoom(user,rinfo);
         //老师创建房间信息的同时 也会给学生创建房间信息 他们的房间信息是一样的
         RedisMgr.createStudentClassRoom(studentName,rinfo);
@@ -174,6 +180,8 @@ public class ClassRoomService extends BaseService{
         roomInfo.setStudentname(studentName);
         roomInfo.setSubject(subject);
         roomInfo.setInfo(info);
+
+
         roomInfo.setTeacherChannel(channel);
         //加入房间
         ClassRoomMgr.addClassRoom(roomId,roomInfo);

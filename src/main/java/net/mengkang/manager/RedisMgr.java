@@ -121,11 +121,15 @@ public class RedisMgr {
             String studentName = (String)json.get("studentName");
             String subject = (String)json.get("subject");
             String info = (String)json.get("info");
+            String starClassTime = (String)json.get("starClassTime");
             rinfo.setRoomId(roomId);
             rinfo.setGrade(grade);
             rinfo.setStudentname(studentName);
             rinfo.setSubject(subject);
             rinfo.setInfo(info);
+
+            rinfo.setStarClassTime(starClassTime);
+
             roomInfos.add(rinfo);
         }
         return roomInfos;
@@ -169,6 +173,8 @@ public class RedisMgr {
         clientObject.put("studentName",roomInfo.getStudentname());
         clientObject.put("subject",roomInfo.getSubject());
         clientObject.put("info",roomInfo.getInfo());
+        clientObject.put("starClassTime",roomInfo.getStarClassTime());
+
         String clientObjectString = clientObject.toString();
         jedis.lpush(key,clientObjectString);
         jedis.close();
@@ -184,6 +190,8 @@ public class RedisMgr {
         clientObject.put("studentName",roomInfo.getStudentname());
         clientObject.put("subject",roomInfo.getSubject());
         clientObject.put("info",roomInfo.getInfo());
+        clientObject.put("starClassTime",roomInfo.getStarClassTime());
+
         String clientObjectString = clientObject.toString();
         jedis.lpush(key,clientObjectString);
         jedis.close();
