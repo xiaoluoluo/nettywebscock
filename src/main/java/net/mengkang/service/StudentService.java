@@ -16,21 +16,18 @@ public class StudentService extends BaseService{
     // 同时在老师列表里面增加一个学生
 
 
-    /**增加学生**/
-    public static void addStudent(Channel channel, JSONObject json){
+    /**学生注册**/
+    public static void registerStudent(Channel channel, JSONObject json){
 
-        String teacherUser= (String) json.get("teacherUser");
 
         String studentName= (String) json.get("stName");
         String studentPhone= (String) json.get("stPhone");
         String studentAddress= (String) json.get("stAddress");
         String studentGrade= (String) json.get("stGrade");
         String studentRemark= (String) json.get("stRemark");
-
-//        long studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
+        String studentpassword= (String) json.get("password");
 
         long studentId = getId();
-
 
         JSONObject studentObject = new JSONObject();
         studentObject.put("studentName",studentName);
@@ -39,7 +36,7 @@ public class StudentService extends BaseService{
         studentObject.put("studentGrade",studentGrade);
         studentObject.put("studentRemark",studentRemark);
         studentObject.put("studentId",studentId);
-        studentObject.put("password",studentId+studentName);
+        studentObject.put("password",studentpassword);
 
         //暂时没有做重复的过滤
         String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
@@ -49,7 +46,53 @@ public class StudentService extends BaseService{
             return;
         }
         RedisMgr.addStudentTOPool(studentName,studentObject);
-        RedisMgr.addStudentTOTeacher(teacherUser,studentObject);
+
+        JSONObject data = new JSONObject();
+        data.put("code",10113);
+        //1表示成功
+        data.put("status",1);
+        String dataMessage =data.toString();
+        String message = MessMgr.createMessage(0,"",0, dataMessage);
+        channel.writeAndFlush(new TextWebSocketFrame(message));
+    }
+
+
+
+
+    /**增加学生**/
+    public static void addStudent(Channel channel, JSONObject json){
+
+        String teacherUser= (String) json.get("teacherUser");
+
+        String studentName= (String) json.get("stName");
+//        String studentPhone= (String) json.get("stPhone");
+//        String studentAddress= (String) json.get("stAddress");
+//        String studentGrade= (String) json.get("stGrade");
+//        String studentRemark= (String) json.get("stRemark");
+
+//        long studentId = Client.CONCURRENT_INTEGER.getAndIncrement();
+
+//        long studentId = getId();
+//
+//
+//        JSONObject studentObject = new JSONObject();
+//        studentObject.put("studentName",studentName);
+//        studentObject.put("studentPhone",studentPhone);
+//        studentObject.put("studentAddress",studentAddress);
+//        studentObject.put("studentGrade",studentGrade);
+//        studentObject.put("studentRemark",studentRemark);
+//        studentObject.put("studentId",studentId);
+//        studentObject.put("password",studentId+studentName);
+
+        //暂时没有做重复的过滤
+        String studentInfo = RedisMgr.getValue(studentName+"studentInfo");
+        if (studentInfo == null){
+            String message = MessMgr.createMessage(3,"这个学生还没有注册，先让学生去注册",0, "");
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+            return;
+        }
+//        RedisMgr.addStudentTOPool(studentName,studentObject);
+        RedisMgr.addStudentTOTeacher(teacherUser,studentInfo);
 
         JSONObject data = new JSONObject();
         data.put("code",10105);

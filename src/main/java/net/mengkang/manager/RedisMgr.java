@@ -236,10 +236,10 @@ public class RedisMgr {
     }
 
     /**增加学生到老师下面**/
-    public static void addStudentTOTeacher(String teacherUser ,JSONObject clientObject){
+    public static void addStudentTOTeacher(String teacherUser ,String studentString){
         String key = teacherUser+"studentInfo";
         Jedis jedis = pool.getResource();
-        String clientObjectString = clientObject.toString();
+        String clientObjectString = studentString;
         jedis.lpush(key,clientObjectString);
         jedis.close();
     }

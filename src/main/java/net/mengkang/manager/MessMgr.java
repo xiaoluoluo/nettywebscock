@@ -71,7 +71,14 @@ public class MessMgr {
             case 10112:{
                 // 老师 进入第一面板
                 ClassRoomService.enterTeacherFirstRoom(channel,json);
+                return;
             }
+            case 10113:{
+                //学生注册
+                StudentService.registerStudent(channel,json);
+                return;
+            }
+
 
         }
 //        ClientMgr.sendMessToRoomClient(client,request);
