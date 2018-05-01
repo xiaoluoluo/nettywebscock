@@ -81,6 +81,7 @@ public class ClassRoomService extends BaseService{
             infoJson.put("subject",info.getSubject());
             infoJson.put("studentName",info.getStudentname());
             infoJson.put("info",info.getInfo());
+            infoJson.put("starClassTime",info.getStarClassTime());
             allRoomInfoJson.put(infoJson);
         }
         JSONObject data = new JSONObject();

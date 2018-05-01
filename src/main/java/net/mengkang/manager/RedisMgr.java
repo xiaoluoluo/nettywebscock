@@ -152,11 +152,13 @@ public class RedisMgr {
             String studentName0 = (String)json.get("studentName");
             String subject = (String)json.get("subject");
             String info = (String)json.get("info");
+            String starClassTime = (String)json.get("starClassTime");
             rinfo.setRoomId(roomId);
             rinfo.setGrade(grade);
             rinfo.setStudentname(studentName0);
             rinfo.setSubject(subject);
             rinfo.setInfo(info);
+            rinfo.setStarClassTime(starClassTime);
             roomInfos.add(rinfo);
         }
         return roomInfos;
