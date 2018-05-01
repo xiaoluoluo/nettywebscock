@@ -109,7 +109,7 @@ public class RedisMgr {
         String key = user+ "roomInfo";
 
         List<String> allRoomInfo = getAllValue(key);
-        List<RoomInfo> roomInfos = new ArrayList<>();
+        List<RoomInfo> roomInfos = new ArrayList<RoomInfo>();
         if(allRoomInfo==null ||allRoomInfo.equals("")){
             return roomInfos;
         }
@@ -140,7 +140,7 @@ public class RedisMgr {
         String key = studentName+ "roomInfo";
         List<String> allRoomInfo = getAllValue(key);
 
-        List<RoomInfo> roomInfos = new ArrayList<>();
+        List<RoomInfo> roomInfos = new ArrayList<RoomInfo>();
         if(allRoomInfo==null ||allRoomInfo.isEmpty()){
             return roomInfos;
         }

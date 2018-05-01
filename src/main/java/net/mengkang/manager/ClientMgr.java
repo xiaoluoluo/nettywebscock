@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ClientMgr {
 
-    private static Map<Long, Client> allClient = new ConcurrentHashMap<>();
+    private static Map<Long, Client> allClient = new ConcurrentHashMap<Long, Client>();
 
     public static Client getClient(long clientId){
         return allClient.get(clientId);
