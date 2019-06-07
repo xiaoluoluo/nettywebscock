@@ -1,5 +1,6 @@
 package net.mengkang.manager;
 
+import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import net.mengkang.entity.RoomInfo;
 
@@ -22,7 +23,29 @@ public class ClassRoomMgr {
 
     //增加房间
     public static void addClassRoom(Long roomId, RoomInfo roomInfo){
-        roomMap.put(roomId,roomInfo);
+        RoomInfo info  =  roomMap.get(roomId);
+        if (info == null){
+            roomMap.put(roomId,roomInfo);
+            return;
+        }
+        if (info.getTeacherChannel()== null){
+            info.setTeacherChannel(roomInfo.getTeacherChannel());
+        }
+        if (info.getStudentChannel() == null){
+            info.setStudentChannel(roomInfo.getStudentChannel());
+        }
+    }
+
+    public static void changeChannel(boolean isTeacher, Long roomId,Channel channel){
+        RoomInfo info  =  roomMap.get(roomId);
+        if (info == null){
+            return;
+        }
+        if (isTeacher){
+            info.setTeacherChannel(channel);
+        }else {
+            info.setStudentChannel(channel);
+        }
     }
 
     //发消息给房间其他成员

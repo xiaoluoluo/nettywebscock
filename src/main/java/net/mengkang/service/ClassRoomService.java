@@ -186,6 +186,7 @@ public class ClassRoomService extends BaseService{
         roomInfo.setTeacherChannel(channel);
         //加入房间
         ClassRoomMgr.addClassRoom(roomId,roomInfo);
+        ClassRoomMgr.changeChannel(true,roomId,channel);
 
         List<String> allClassRoomMessage = RedisMgr.getClassRoomMessage(roomId);
         JSONArray allMessageJson = new JSONArray();
@@ -223,7 +224,7 @@ public class ClassRoomService extends BaseService{
         }
         RoomInfo roomInfo = ClassRoomMgr.getRoomInfo(roomId);
         if (roomInfo == null){
-            String message = MessMgr.createMessage(5,"房间号有错误",0, "");
+            String message = MessMgr.createMessage(5,"老师还没有进入这个房间",0, "");
             channel.writeAndFlush(new TextWebSocketFrame(message));
             return;
         }
@@ -234,7 +235,10 @@ public class ClassRoomService extends BaseService{
             return;
         }
         // 老师进入这个房间之后 就可以通信了
-        roomInfo.setStudentChannel(channel);
+//        roomInfo.setStudentChannel(channel);
+        ClassRoomMgr.changeChannel(false,roomId,channel);
+//        ClassRoomMgr.addClassRoom(roomId,roomInfo);
+
 
         List<String> allClassRoomMessage = RedisMgr.getClassRoomMessage(roomId);
         JSONArray allMessageJson = new JSONArray();

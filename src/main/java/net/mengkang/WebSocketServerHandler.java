@@ -82,7 +82,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
             if (channelFuture.isSuccess()) {
                 // 请求字符串
                 String requestString = parameters.get(HTTP_REQUEST_STRING).get(0);
-                client = RedisMgr.getClientByRequest(requestString);
+              client = RedisMgr.getClientByRequest(requestString);
                 if(client != null){
                     ClientMgr.addClient(client);
                 }
@@ -136,6 +136,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         //这里需要改
+        if (ctx.channel() == null)
+        {
+            System.out.println(ctx.channel().id());
+        }
         if (client != null) {
             ClientMgr.removeClient(client);
         }

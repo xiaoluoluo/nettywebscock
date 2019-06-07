@@ -2,6 +2,7 @@ package net.mengkang.service;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import net.mengkang.dto.ClientStatus;
 import net.mengkang.entity.Client;
 import net.mengkang.manager.MessMgr;
 import net.mengkang.manager.RedisMgr;
@@ -46,7 +47,6 @@ public class StudentService extends BaseService{
             return;
         }
         RedisMgr.addStudentTOPool(studentName,studentObject);
-
         JSONObject data = new JSONObject();
         data.put("code",10113);
         //1表示成功

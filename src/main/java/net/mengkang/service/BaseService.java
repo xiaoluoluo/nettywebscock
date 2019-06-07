@@ -9,16 +9,16 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class BaseService {
 
-    public static String redisKey = "";
+//    public static String redisKey = "";
 
-    private static AtomicLong CONCURRENT_INTEGER = new AtomicLong(0);
+//    private static AtomicLong CONCURRENT_INTEGER = new AtomicLong(0);
 
     public static long getId() {
          Long id = RedisMgr.getId();
-         if (id == null){
-            id = CONCURRENT_INTEGER.getAndIncrement();
-         }
-         RedisMgr.setId(id+1);
-        return id+1;
+//         if (id == null){
+//            id = CONCURRENT_INTEGER.getAndIncrement();
+//         }
+//         RedisMgr.setId(id+1);
+        return id;
     }
 }

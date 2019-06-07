@@ -1,7 +1,9 @@
 package net.mengkang.manager;
 
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import net.mengkang.dto.UserStatus;
 import net.mengkang.entity.Client;
+import net.mengkang.entity.RoomInfo;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -30,6 +32,17 @@ public class ClientMgr {
             System.err.println("removeClient don't find this client. clientId: "+client.getClientId()+"clientUserName:"+client.getUsername());
         }else {
             allClient.remove(client);
+            RoomInfo room = ClassRoomMgr.getRoomInfo(client1.getRoomId());
+            if (room == null){
+                return;
+            }
+            if (client.getUserStatus()== UserStatus.student.getStatus()){
+                room.setStudentChannel(null);
+            }else if (client.getUserStatus()== UserStatus.teacher.getStatus()){
+                room.setTeacherChannel(null);
+            }else {
+                System.err.println("room err ");
+            }
         }
     }
 }

@@ -31,17 +31,24 @@ public class RedisMgr {
     }
 
     public static Long getId(){
-        String key = "id";
-        if (getValue(key)==null){
-            return null;
-        }
-        return Long.valueOf(getValue(key));
+//        String key = "id";
+        Jedis jedis = pool.getResource();
+        return jedis.incr("id");
+
+//        if (getValue(key)==null){
+//            return null;
+//        }
+//        return Long.valueOf(getValue(key));
     }
 
-    public static void setId(long id){
-        String key = "id";
-        setValue("id",String.valueOf(id));
-    }
+//    public static void setId(long id){
+
+//        Jedis jedis = pool.getResource();
+//
+//        jedis.incr("id");
+//        String key = "id";
+//        setValue("id",String.valueOf(id));
+//    }
 
     /**
      *
@@ -216,19 +223,19 @@ public class RedisMgr {
 
 
 
-    /**进入房间**/
-    public static boolean hasClassRoom(String user,int roomId){
-        String key = user+ "roomInfo";
-        List<String> allRoomInfo = getAllValue(key);
-        for (String roomInfo : allRoomInfo) {
-            JSONObject json = new JSONObject(roomInfo);
-            long rId = (Long)json.get("roomId");
-            if (roomId == rId){
-                return true;
-            }
-        }
-        return false;
-    }
+//    /**进入房间**/
+//    public static boolean hasClassRoom(String user,int roomId){
+//        String key = user+ "roomInfo";
+//        List<String> allRoomInfo = getAllValue(key);
+//        for (String roomInfo : allRoomInfo) {
+//            JSONObject json = new JSONObject(roomInfo);
+//            long rId = (Long)json.get("roomId");
+//            if (roomId == rId){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     /**增加学生到学生库**/
     public static void addStudentTOPool(String studentName,JSONObject clientObject){
@@ -253,13 +260,13 @@ public class RedisMgr {
         return allStudentInfo;
     }
 
-    /** 保存房间的消息**/
-    public static void saveRoomMessage(String user,int roomId,String message){
-        Jedis jedis = pool.getResource();
-        String key = user+roomId+"message";
-        jedis.lpush(key,message);
-        jedis.close();
-    }
+//    /** 保存房间的消息**/
+//    public static void saveRoomMessage(String user,int roomId,String message){
+//        Jedis jedis = pool.getResource();
+//        String key = user+roomId+"message";
+//        jedis.lpush(key,message);
+//        jedis.close();
+//    }
 
 
     public static  List<String> getAllValue(String key){
