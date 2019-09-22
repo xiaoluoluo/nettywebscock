@@ -1,6 +1,7 @@
 package net.mengkang.manager;
 
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import net.mengkang.service.ClassRoomService;
 import net.mengkang.service.LoginService;
 import net.mengkang.service.StudentService;
@@ -76,6 +77,11 @@ public class MessMgr {
             case 10113:{
                 //学生注册
                 StudentService.registerStudent(channel,json);
+                return;
+            }
+            case 20001:{
+                //心跳
+                StudentService.pong(channel,json);
                 return;
             }
 

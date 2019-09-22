@@ -57,6 +57,13 @@ public class StudentService extends BaseService{
     }
 
 
+    public static void pong(Channel channel, JSONObject json){
+        JSONObject data = new JSONObject();
+        data.put("code",20001);
+        //1表示成功
+        data.put("status",1);
+        channel.writeAndFlush(new TextWebSocketFrame(MessMgr.createMessage(0,"",0, data.toString())));
+    }
 
 
     /**增加学生**/
